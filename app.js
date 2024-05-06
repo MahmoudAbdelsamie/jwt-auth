@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const registerRoutes = require('./routes/register');
 const loginRoutes = require('./routes/login');
+const userRoutes = require('./routes/user')
 const { testDBConnection } = require('./utils/helper');
 
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1', registerRoutes);
 app.use('/api/v1', loginRoutes);
+app.use('/api/v1', userRoutes);
 
 
 testDBConnection()
