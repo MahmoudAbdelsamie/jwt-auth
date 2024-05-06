@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const registerRoutes = require('./routes/register');
+const loginRoutes = require('./routes/login');
 const { testDBConnection } = require('./utils/helper');
 
 
@@ -19,6 +20,8 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1', registerRoutes);
+app.use('/api/v1', loginRoutes);
+
 
 testDBConnection()
     .then(() => {
