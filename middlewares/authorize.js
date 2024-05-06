@@ -1,4 +1,5 @@
-const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const pool = require('../config/database');
 require('dotenv').config();
 
 
@@ -21,7 +22,7 @@ exports.isAuthorized = (req, res, next) => {
         });
     }
     const token = authHeader.split(' ')[1];
-    bcrypt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
         if(err) {
             return res.status(401).send({
                 status: 'fail', 
@@ -29,7 +30,22 @@ exports.isAuthorized = (req, res, next) => {
                 error: err
             });
         }
-        req.user = decoded;
+        const userId = decoded.id;
+        const query = 'SELECT id, username, email FROM users WHERE id=$1;';
+        try {
+            const users = await pool.query(query, [userId]);
+            if(users.rowCount < 1) {
+                req.user = {};
+            } else {
+                req.user = users.rows[0];
+            }
+        } catch(err) {
+            return res.status(500).send({
+                status: 'error',
+                message: 'Internal Server Error',
+                error: err.message
+            })
+        }
         next();
     })
 }

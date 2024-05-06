@@ -17,6 +17,7 @@ exports.validateRegister = [
             if(users.rowCount > 0) {
                 throw new Error('Email Already Exists!');
             }
+            return true;
         })
         .normalizeEmail(),
     body('password')
@@ -33,5 +34,6 @@ exports.validateRegister = [
         if(value !== req.body.password) {
             throw new Error('Passwords Does Not Match!')
         }
-})
+        return true;
+    })
 ] 
