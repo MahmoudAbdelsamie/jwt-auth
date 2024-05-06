@@ -6,11 +6,11 @@ const { validateRegister } = require('../validations/register');
 
 
 router
-    .post(
-        '/register',
-        validateRegister,
-        register
-    );
+    .route('/register')
+        .post(
+            validateRegister,
+            register
+        );
 
 
 module.exports = router;
